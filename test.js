@@ -1,7 +1,10 @@
 import { Selector } from 'testcafe';
+module.exports = {
+    pageRequestTimeout: 60000, // Set the timeout to 60 seconds
+};
 
 fixture('Fitness Tracker App Test')
-    .page('file:///path/to/your/index.html'); // Update the path to your HTML file
+    .page('file://home/aarjanp/Desktop/fitness-tracker/frontend/index.html'); // Update the path to your HTML file
 
 // Test Case 1: Check if the login button is working
 test('Login Button Test', async t => {
