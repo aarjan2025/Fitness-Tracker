@@ -4,7 +4,7 @@ module.exports = {
 };
 
 fixture('Fitness Tracker App Test')
-    .page('file://home/aarjanp/Desktop/fitness-tracker/frontend/index.html'); // Update the path to your HTML file
+    .page('file://home/aarjanp/Desktop/fitness-tracker/Frontend/index.html'); // Update the path to your HTML file
 
 // Test Case 1: Check if the login button is working
 test('Login Button Test', async t => {
