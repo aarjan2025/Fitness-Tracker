@@ -1,0 +1,26 @@
+{
+  "name": "fitness-tracker",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "body-parser": "^2.2.2",
+    "bootstrap": "^5.3.8",
+    "express": "^5.2.1",
+    "markdown-it": "^14.1.1",
+    "nodemon": "^3.1.14",
+    "semver": "^7.7.4",
+    "simple-update-notifier": "^2.0.0",
+    "sqlite3": "^6.0.1"
+  },
+  "devDependencies": {
+    "apidoc": "^1.2.0"
+  }
+}

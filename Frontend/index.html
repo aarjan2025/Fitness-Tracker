@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fitness Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="phone">
+ 
+  <!-- SCREEN 1: LOGIN -->
+  <div class="screen active" id="screen-login">
+    <div class="brand">Fitness Tracker</div>
+    <div>
+      <input type="email" id="inp-email" placeholder="Email" />
+      <input type="password" id="inp-password" placeholder="Password" />
+      <div class="error-msg" id="login-error"></div>
+      <button class="login-btn" onclick="doLogin()">Login</button>
+    </div>
+    <div class="tagline">Track Your Fitness Journey</div>
+  </div>
+ 
+  <!-- SCREEN 2: DASHBOARD -->
+  <div class="screen" id="screen-dashboard">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('screen-login')">Back</button>
+    </div>
+    <div class="screen-title">Dashboard</div>
+    <div class="dashboard-body">
+      <div style="margin: 16px 0;">
+        <div class="stat-card">
+          <div>
+            <div class="stat-label">Total Workouts</div>
+            <div class="stat-value" id="total-workouts">0</div>
+          </div>
+          <div class="stat-icon">🏋️</div>
+        </div>
+        <div class="stat-card">
+          <div>
+            <div class="stat-label">Total Calories</div>
+            <div class="stat-value" id="total-calories">0 cal</div>
+          </div>
+          <div class="stat-icon">🔥</div>
+        </div>
+      </div>
+      <button class="dash-btn-primary" onclick="openAddWorkout()">&#43; Add Workout</button>
+      <button class="dash-btn-outline" onclick="goTo('screen-history')">&#43; View Workouts</button>
+    </div>
+  </div>
+ 
+  <!-- SCREEN 3: ADD / EDIT WORKOUT -->
+  <div class="screen" id="screen-add">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('screen-dashboard')">Back</button>
+    </div>
+    <div class="screen-title" id="add-screen-title">Add Workout</div>
+    <div class="form-card">
+      <div class="form-group">
+        <label class="form-label">Workout Type</label>
+        <input type="text" class="form-input" id="inp-type" placeholder="Type" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Duration (minutes)</label>
+        <input type="number" class="form-input" id="inp-duration" placeholder="mins" min="1" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">Calories</label>
+        <input type="number" class="form-input" id="inp-calories" placeholder="cal" min="1" />
+      </div>
+    </div>
+    <div class="form-error" id="form-error"></div>
+    <button class="save-btn" onclick="saveWorkout()">Save Workout</button>
+  </div>
+ 
+  <!-- SCREEN 4: WORKOUT HISTORY -->
+  <div class="screen" id="screen-history">
+    <div class="topbar">
+      <button class="back-btn" onclick="goTo('screen-dashboard')">Back</button>
+    </div>
+    <div class="screen-title">Workout History</div>
+    <div class="history-list" id="history-list"></div>
+  </div>
+ 
+  <div class="toast" id="toast"></div>
+</div>
+
+  <script src="app.js"></script>
+</body>
+</html>
