@@ -1,8 +1,8 @@
 import { Selector } from 'testcafe';
 
 fixture('Fitness Tracker App Test')
-    .page('file:///path/to/your/index.html'); // Change this to the path where index.html is located, or use localhost if the app is running on a server
-
+    .page('http://localhost:3000'); // If you're running a local server
+    
 // Test Case 1: Check if the login button is working
 test('Login Button Test', async t => {
     const emailInput = Selector('#inp-email'); // The email input field
