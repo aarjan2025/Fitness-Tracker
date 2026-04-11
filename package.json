@@ -1,10 +1,12 @@
 {
   "name": "fitness-tracker",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Fitness Tracker REST API with SQLite",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "doc": "apidoc -i routes/ -o apidoc/",
+    "test": "testcafe chrome tests/test.js"
   },
   "keywords": [],
   "author": "",
@@ -21,8 +23,8 @@
     "sqlite3": "^6.0.1"
   },
   "devDependencies": {
-    "apidoc": "^0.29.0",
+    "apidoc": "^1.2.0",
     "esbuild": "^0.28.0",
-    "testcafe": "^3.7.4"
+    "testcafe": "^3.5.0"
   }
 }

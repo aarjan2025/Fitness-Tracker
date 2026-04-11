@@ -1,1 +1,4 @@
 node_modules
+fitnessTracker.db
+apidoc/
+.DS_Store

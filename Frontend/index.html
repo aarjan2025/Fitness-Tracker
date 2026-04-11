@@ -7,8 +7,8 @@
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
 <div class="phone">
+
   <!-- SCREEN 1: LOGIN -->
   <div class="screen active" id="screen-login">
     <div class="brand">Fitness Tracker</div>
@@ -34,18 +34,18 @@
             <div class="stat-label">Total Workouts</div>
             <div class="stat-value" id="total-workouts">0</div>
           </div>
-          <div class="stat-icon">🏋️</div>
+          <div class="stat-icon">&#127947;</div>
         </div>
         <div class="stat-card">
           <div>
             <div class="stat-label">Total Calories</div>
             <div class="stat-value" id="total-calories">0 cal</div>
           </div>
-          <div class="stat-icon">🔥</div>
+          <div class="stat-icon">&#128293;</div>
         </div>
       </div>
       <button class="dash-btn-primary" onclick="openAddWorkout()">&#43; Add Workout</button>
-      <button class="dash-btn-outline" onclick="goTo('screen-history')">&#43; View Workouts</button>
+      <button class="dash-btn-outline" onclick="goTo('screen-history')">View Workouts</button>
     </div>
   </div>
 
@@ -58,15 +58,15 @@
     <div class="form-card">
       <div class="form-group">
         <label class="form-label">Workout Type</label>
-        <input type="text" class="form-input" id="inp-type" placeholder="Type" />
+        <input type="text" class="form-input" id="inp-type" placeholder="e.g. Running" />
       </div>
       <div class="form-group">
         <label class="form-label">Duration (minutes)</label>
-        <input type="number" class="form-input" id="inp-duration" placeholder="mins" min="1" />
+        <input type="number" class="form-input" id="inp-duration" placeholder="e.g. 30" min="1" />
       </div>
       <div class="form-group">
-        <label class="form-label">Calories</label>
-        <input type="number" class="form-input" id="inp-calories" placeholder="cal" min="1" />
+        <label class="form-label">Calories Burned</label>
+        <input type="number" class="form-input" id="inp-calories" placeholder="e.g. 200" min="1" />
       </div>
     </div>
     <div class="form-error" id="form-error"></div>
@@ -84,7 +84,6 @@
 
   <div class="toast" id="toast"></div>
 </div>
-
 <script src="app.js"></script>
 </body>
 </html>

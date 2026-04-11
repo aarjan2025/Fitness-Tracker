@@ -1,26 +1,30 @@
+// In-memory workout data (replaces broken API fetch calls)
 let workouts = [
-  { id: 1, type: 'Running', duration: 30, calories: 200 },
-  { id: 2, type: 'GYM', duration: 45, calories: 350 },
-  { id: 3, type: 'Yoga', duration: 60, calories: 150 },
-  { id: 4, type: 'Cycling', duration: 40, calories: 220 },
-  { id: 5, type: 'HIIT', duration: 20, calories: 230 },
+  { id: 1, type: 'Running',  duration: 30, calories: 200 },
+  { id: 2, type: 'GYM',      duration: 45, calories: 350 },
+  { id: 3, type: 'Yoga',     duration: 60, calories: 150 },
+  { id: 4, type: 'Cycling',  duration: 40, calories: 220 },
+  { id: 5, type: 'HIIT',     duration: 20, calories: 230 },
 ];
 let nextId = 6;
 let editingId = null;
 
-// Function to switch between screens
+// Switch between screens
 function goTo(screenId) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(function(s) {
+    s.classList.remove('active');
+  });
   document.getElementById(screenId).classList.add('active');
   if (screenId === 'screen-dashboard') updateDashboard();
-  if (screenId === 'screen-history') renderHistory();
+  if (screenId === 'screen-history')   renderHistory();
 }
 
-// Login function (simulating login)
+// Login - basic validation only (no real backend needed)
 function doLogin() {
-  const email = document.getElementById('inp-email').value.trim();
-  const password = document.getElementById('inp-password').value.trim();
-  const errEl = document.getElementById('login-error');
+  var email    = document.getElementById('inp-email').value.trim();
+  var password = document.getElementById('inp-password').value.trim();
+  var errEl    = document.getElementById('login-error');
+
   if (!email || !password) {
     errEl.textContent = 'Please enter email and password.';
     return;
@@ -29,35 +33,51 @@ function doLogin() {
   goTo('screen-dashboard');
 }
 
-// Fetch workout data from API and update the dashboard
+// Update dashboard stats from in-memory array
 function updateDashboard() {
-  fetch('http://localhost:3000/workouts')
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('total-workouts').textContent = data.length;
-      const totalCal = data.reduce((s, w) => s + w.calories, 0);
-      document.getElementById('total-calories').textContent = totalCal + ' cal';
-    })
-    .catch(err => console.error('Error fetching workouts:', err));
+  document.getElementById('total-workouts').textContent = workouts.length;
+  var totalCal = workouts.reduce(function(sum, w) { return sum + w.calories; }, 0);
+  document.getElementById('total-calories').textContent = totalCal + ' cal';
 }
 
-// Open the Add Workout screen
+// Open the Add Workout form (blank)
 function openAddWorkout() {
   editingId = null;
   document.getElementById('add-screen-title').textContent = 'Add Workout';
-  document.getElementById('inp-type').value = '';
+  document.getElementById('inp-type').value     = '';
   document.getElementById('inp-duration').value = '';
   document.getElementById('inp-calories').value = '';
   document.getElementById('form-error').textContent = '';
   goTo('screen-add');
 }
 
-// Save a new or edited workout
+// Open the Edit Workout form (pre-filled)
+function editWorkout(id) {
+  var workout = workouts.find(function(w) { return w.id === id; });
+  if (!workout) return;
+
+  editingId = id;
+  document.getElementById('add-screen-title').textContent = 'Edit Workout';
+  document.getElementById('inp-type').value     = workout.type;
+  document.getElementById('inp-duration').value = workout.duration;
+  document.getElementById('inp-calories').value = workout.calories;
+  document.getElementById('form-error').textContent = '';
+  goTo('screen-add');
+}
+
+// Delete a workout by id
+function deleteWorkout(id) {
+  workouts = workouts.filter(function(w) { return w.id !== id; });
+  renderHistory();
+  showToast('Workout deleted!');
+}
+
+// Save new or edited workout to in-memory array
 function saveWorkout() {
-  const type = document.getElementById('inp-type').value.trim();
-  const duration = parseInt(document.getElementById('inp-duration').value);
-  const calories = parseInt(document.getElementById('inp-calories').value);
-  const errEl = document.getElementById('form-error');
+  var type     = document.getElementById('inp-type').value.trim();
+  var duration = parseInt(document.getElementById('inp-duration').value, 10);
+  var calories = parseInt(document.getElementById('inp-calories').value, 10);
+  var errEl    = document.getElementById('form-error');
 
   if (!type || isNaN(duration) || isNaN(calories) || duration <= 0 || calories <= 0) {
     errEl.textContent = 'Please fill in all fields correctly.';
@@ -65,70 +85,57 @@ function saveWorkout() {
   }
   errEl.textContent = '';
 
-  // If editing, update the workout via PUT API
   if (editingId !== null) {
-    fetch(`http://localhost:3000/workouts/${editingId}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ type, duration, calories })
-    })
-    .then(() => {
-      showToast('Workout updated!');
-      goTo('screen-history');
-    })
-    .catch(err => console.error('Error updating workout:', err));
+    // Update existing workout
+    var workout = workouts.find(function(w) { return w.id === editingId; });
+    if (workout) {
+      workout.type     = type;
+      workout.duration = duration;
+      workout.calories = calories;
+    }
+    editingId = null;
+    showToast('Workout updated!');
   } else {
-    // If adding, create a new workout via POST API
-    fetch('http://localhost:3000/workouts', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ type, duration, calories })
-    })
-    .then(() => {
-      showToast('Workout saved!');
-      goTo('screen-history');
-    })
-    .catch(err => console.error('Error adding workout:', err));
+    // Add new workout
+    workouts.push({ id: nextId++, type: type, duration: duration, calories: calories });
+    showToast('Workout saved!');
   }
+
+  goTo('screen-history');
 }
 
-// Render workout history from API
+// Render workout history list from in-memory array
 function renderHistory() {
-  const list = document.getElementById('history-list');
-  fetch('http://localhost:3000/workouts')
-    .then(res => res.json())
-    .then(data => {
-      if (data.length === 0) {
-        list.innerHTML = '<div class="empty-msg">No workouts yet. Add one!</div>';
-        return;
-      }
-      list.innerHTML = data.map(w => `
-        <div class="workout-item">
-          <div class="workout-info">
-            <strong>${w.type}:</strong><br/>
-            ${w.duration} min / ${w.calories} cal
-          </div>
-          <div class="btn-group">
-            <button class="btn-edit" onclick="editWorkout(${w.id})">Edit</button>
-            <button class="btn-delete" onclick="deleteWorkout(${w.id})">Delete</button>
-          </div>
-        </div>
-      `).join('');
-    })
-    .catch(err => console.error('Error fetching workouts history:', err));
+  var list = document.getElementById('history-list');
+
+  if (workouts.length === 0) {
+    list.innerHTML = '<div class="empty-msg">No workouts yet. Add one!</div>';
+    return;
+  }
+
+  list.innerHTML = workouts.map(function(w) {
+    return (
+      '<div class="workout-item">' +
+        '<div class="workout-info">' +
+          '<strong>' + w.type + '</strong><br/>' +
+          w.duration + ' min / ' + w.calories + ' cal' +
+        '</div>' +
+        '<div class="btn-group">' +
+          '<button class="btn-edit"   onclick="editWorkout('   + w.id + ')">Edit</button>' +
+          '<button class="btn-delete" onclick="deleteWorkout(' + w.id + ')">Delete</button>' +
+        '</div>' +
+      '</div>'
+    );
+  }).join('');
 }
 
-// Show toast notifications
+// Show a brief toast notification
 function showToast(msg) {
-  const t = document.getElementById('toast');
+  var t = document.getElementById('toast');
   t.textContent = msg;
   t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
+  setTimeout(function() { t.classList.remove('show'); }, 2000);
 }
 
-// Initialize the dashboard
+// Initialise dashboard on load
 updateDashboard();
